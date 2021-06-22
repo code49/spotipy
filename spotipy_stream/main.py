@@ -45,7 +45,7 @@ scope = "user-read-currently-playing"
 redirect_uri = "http://localhost:8888/callback"
 
 #time between spotipy/tkinter info updates
-update_delay = 2
+update_delay = 3
 
 #----- create tk window object -----
 
@@ -286,7 +286,7 @@ class Start:
     def __init__(self, windwow, spotify_object):
         self.label = tk.Label(window, text="")
         self.label.pack()
-        self.label.after(update_delay*1000, lambda: self.updateTkinter(spotify_object)) #this kick-starts updating of the tkinter variables
+        self.label.after(1000, lambda: self.updateTkinter(spotify_object)) #this kick-starts updating of the tkinter variables
 
     def updateTkinter(self, spotify_object):
         """
