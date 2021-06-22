@@ -8,7 +8,12 @@ we'll see ¯\_(ツ)_/¯
 
 #----- setup dev stuff -----
 
+from SpotipyFunction_Set.playback import basic_song_info
 from python_dev_tools import dev, final, setup #import the dev tool files, run setup routine
+
+#----- setup spotipy-playback functions -----
+
+from SpotipyFunction_Set import playback
 
 #----- import required modules -----
 
@@ -23,11 +28,11 @@ import tkinter.font as tkFont
 from PIL import ImageTk as itk
 from PIL import Image
 
+#for pulling images from the internet
+import urllib
+
 #time for sleep()
 import time
-
-#multithreading for updating information and the visualization at the same time
-import threading
 
 #----- setup spotify constants -----
 #in the future, it might be worthwhile to create a "settings" file of some variety to accomplish this
@@ -41,6 +46,13 @@ redirect_uri = "http://localhost:8888/callback"
 
 #time between spotipy/tkinter info updates
 update_delay = 2
+
+#----- create tk window object -----
+
+#this needs to be done before the other objects are setup because an instance must be running for some configuration work can be done
+
+#setup window according to window parameters
+window = tk.Tk()
 
 #----- setup visualization constants -----
 
@@ -57,7 +69,7 @@ font_styles = {
 #text maximum lengths - FIX THIS LATER!
 maximum_lengths = {
     "song": 25,
-    "artist": 25
+    "artist": 38
 }
 
 #placement coordinates
@@ -75,6 +87,26 @@ label_padding = {
 
 #default image size
 default_image_size = 320
+
+#----- create other necessary tkinter objects -----
+
+#customize window
+window.title(window_title)
+window.geometry(window_geometry)
+
+#setup text labels
+song_text = tk.StringVar()
+song_text_tk = tk.Label(window, padx=label_padding["song"]["x"], pady=label_padding["song"]["y"], textvariable=song_text, font=font_styles["song"]) 
+song_text_tk.place(x = placement_coordinates["song_text"]["x"], y = placement_coordinates["song_text"]["y"])
+
+artist_text = tk.StringVar()
+artist_text_tk = tk.Label(window, padx=label_padding["artist"]["x"], pady=label_padding["artist"]["y"], textvariable=artist_text, font=font_styles["artist"])
+artist_text_tk.place(x = placement_coordinates["artist_text"]["x"], y = placement_coordinates["artist_text"]["y"])
+
+#setup image - default to no_album_image.jpg
+album_image = itk.PhotoImage(Image.open("./images/no_album_image.jpg"))
+album_image_tk = tk.Label(window, image=album_image)
+album_image_tk.place(x = placement_coordinates["album_image"]["x"], y = placement_coordinates["album_image"]["y"])
 
 #----- setup spotipy api functions -----
 
@@ -110,11 +142,7 @@ def setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri):
     token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
     return spotipy.Spotify(auth=token)
 
-
-
-#----- setup tkinter/visualization -----
-
-def shorten_text(content, length):
+def shortenText(content, length):
     """
     Shorten given texts to given lengths.
 
@@ -149,7 +177,105 @@ def shorten_text(content, length):
 
     return content
 
-#create necessary tkinter objects FINISH THIS FIRST!
+def chooseImage(images_list, default_size):
+    """
+    Returns the URL of the image closest to the desired size without going over.
+
+    Parameters
+    ----------
+
+    images_list: list
+        list of image dictionaries returned by the spotipy api. dictionaries are formatted as
+        {'height': height, 'url': url, 'width': width}
+
+    default_size: int
+        default (also largest) size for the image
+
+    Returns
+    -------
+
+    image_url: str
+        string containing the url for the image with the correct size; "no image" if no image meets the size requirements exists
+    """
+
+    #cycle through every image in the list, backwards because they are ordered from large --> small
+    try:
+        for i in range(0, len(images_list)):
+            if images_list[-i]["height"] > default_image_size: #assuming square images (i.e. same height and width)
+                if i == 1:
+                    return "no image"
+                else:
+                    return images_list[-(i - 1)]["url"] #returning the url of the image previous (i.e. the next smaller image)
+                break #technically speaking, this should never be reached, but just in case
+    
+    #if anything errors (likely due to no images, which seem to occur from obscure but slightly older songs/artists, e.g. Arrumie Shannon's 왜요 왜요)
+    except:
+        return "no image"
+
+def updateTkinterVariables(spotify_object):
+    """
+    Function that updates the all of the various labels and images and returns them.
+
+    Parameters
+    ----------
+    
+    spotify_object: spotify object
+        spotify object with scope 'user-read-currently-playing"
+
+    Returns
+    -------
+
+    song_string: str
+        the song's name as a string
+
+    artist_string: str
+        the song's artist name as a string
+
+    album_image_filepath: str
+        the filepath to the album image as a string
+    """
+
+    dev.devPrint(f"Checking play status: {playback.check_playing(spotify_object)}")
+
+    #check if spotify is currently playing; this should prevent errors
+    if playback.check_playing(spotify_object):
+
+        #get the basic song info for the song
+        artist, song_name, album_name, song_ID = playback.basic_song_info(spotify_object)
+
+        #udpate various labels/images
+        song_string = f"{shortenText(song_name, maximum_lengths['song'])}"
+        artist_string = f"{shortenText(artist, maximum_lengths['artist'])}"
+
+        final.inline(f"{song_string} by {artist_string}")
+
+        #get the image lists for the song
+        album_image_data, aritst_image_data = playback.song_image_info(spotify_object)
+
+        #update album image accordingly
+        resource = urllib.request.urlopen(chooseImage(album_image_data, default_image_size))
+        output = open("./images/album.jpg","wb")
+        output.write(resource.read())
+        output.close()
+
+        #update the album_image_filepath as well
+        album_image_filepath = "./images/album.jpg"
+
+    else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
+
+        dev.devPrint("Some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
+        #set labels to placeholders
+        song_string = "not playing anything"
+        artist_string = shortenText("\"TempT > flame\" - TempT", maximum_lengths["artist"])
+
+        #set image to the default red square
+        album_image_filepath = "./images/no_album_image.jpg"
+
+        final.finalPrint("some issue occurred, labels have been set to defaults.")
+    
+    return song_string, artist_string, album_image_filepath
+
+#----- setup tkinter/visualization -----
 
 class Start:
     """
@@ -157,43 +283,80 @@ class Start:
     """
 
     #initialize the tkinter window, don't worry too much about this
-    def __init__(self, parent):
+    def __init__(self, windwow, spotify_object):
         self.label = tk.Label(window, text="")
         self.label.pack()
-        self.label.after(3000, self.update_tkinter_variables) #this kick-starts updating of the tkinter variables
+        self.label.after(update_delay*1000, lambda: self.updateTkinter(spotify_object)) #this kick-starts updating of the tkinter variables
 
-    def update_tkinter_variables(self):
+    def updateTkinter(self, spotify_object):
         """
         Update all of the tkinter widgets based on spotipy api data.
+
+        Parameters
+        ----------
+
+        spotify_object: spotipy api object
+            spotipy api object with scope 'user-read-currently-playing'
+
+        Returns
+        -------
+        
+        None
         """
 
-        dev.devPrint("updating tkinter variables...")
+        dev.devPrint("updating tkinter...")
 
-        #for all string variables
-        tkinter_variable_list = [
-            (artist_text, "artist text", True),
-            (song_text, "song text", True),
-        ]
-        for object_o, name, shorten in tkinter_variable_list:
-            try_except(object_o, name, shorten)
+        song_string, artist_string, album_image_filepath = updateTkinterVariables(spotify_object)
+
+        #set string variables
+        song_text.set(song_string)
+        artist_text.set(artist_string)
 
         #artist image
         try:
-            image = itk.PhotoImage(Image.open("./images/album.jpg"))
+            image = itk.PhotoImage(Image.open(album_image_filepath))
         except:
-            time.sleep(update_delay)
-            try:
-                image = itk.PhotoImage(Image.open("./images/album.jpg"))
-            except:
-                image = itk.PhotoImage(Image.open("./images/noalbumimage.jpg"))
+            image = itk.PhotoImage(Image.open("./images/no_album_image.jpg"))
 
         album_image_tk.configure(image=image)
         album_image_tk.image = image
         
-        final_print("updating tkinter variables")
+        final.finalPrint("updating tkinter variables...")
+        final.finalPrint("-----------------------------")
 
-        self.label.after(update_delay*1000, self.update_tkinter_variables)
-
-#----- setup multithreading -----
+        try:
+            self.label.after(update_delay*1000,lambda: self.updateTkinter(spotify_object))
+        except:
+            spotify_object = setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri)
+            self.label.after(update_delay*1000,lambda: self.updateTkinter(spotify_object))
 
 #----- run everything -----
+
+def main():
+    """
+    This is just meant to be a function that runs everything, technically speaking this isn't needed now because I'm not using multithreading anymore, but oh well.
+    
+    Parameters
+    ----------
+
+    Returns
+    -------
+    
+    """
+
+    final.finalPrint("starting spotify_stream components...")
+    
+    #setup spotify object
+    spotify_object = setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri)
+
+    #create instance of class start, run update_tknter variables
+    start = Start(window, spotify_object)
+    
+    final.finalPrint("all components have finished starting...")
+    time.sleep(2)
+    final.clear()
+
+    #start the tkinter window update loop
+    window.mainloop()
+
+main()
