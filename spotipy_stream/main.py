@@ -10,6 +10,7 @@ we'll see ¯\_(ツ)_/¯
 
 from SpotipyFunction_Set.playback import basic_song_info
 from python_dev_tools import dev, final, setup #import the dev tool files, run setup routine
+setup.main()
 
 #----- setup spotipy-playback functions -----
 
@@ -24,7 +25,9 @@ import spotipy.util as util
 
 #modules necessary to creating the visualization window
 import tkinter as tk
+import tkinter.ttk as tkttk
 import tkinter.font as tkFont
+from tkinter import HORIZONTAL
 from PIL import ImageTk as itk
 from PIL import Image
 
@@ -68,15 +71,16 @@ font_styles = {
 
 #text maximum lengths - FIX THIS LATER!
 maximum_lengths = {
-    "song": 25,
+    "song": 24,
     "artist": 38
 }
 
 #placement coordinates
 placement_coordinates = {
     "album_image": {"x": 0, "y": 0},
-    "song_text": {"x": 320, "y": 85},
-    "artist_text": {"x": 320, "y": 150}
+    "song_text": {"x": 310, "y": 85},
+    "artist_text": {"x": 310, "y": 150},
+    "progress_bar": {"x": 301, "y": 279}
 }
 
 #label padding
@@ -108,6 +112,11 @@ album_image = itk.PhotoImage(Image.open("./images/no_album_image.jpg"))
 album_image_tk = tk.Label(window, image=album_image)
 album_image_tk.place(x = placement_coordinates["album_image"]["x"], y = placement_coordinates["album_image"]["y"])
 
+#setup progress bar
+progress_value = 0
+progress_bar_tk = tkttk.Progressbar(window, orient=HORIZONTAL, length=500, mode="determinate")
+progress_bar_tk.place(x = placement_coordinates["progress_bar"]["x"], y = placement_coordinates["progress_bar"]["y"])
+
 #----- setup spotipy api functions -----
 
 def setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri):
@@ -115,7 +124,7 @@ def setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri):
     Function that sets up the spotify api token and subsequently the spotify object.
 
     Parameters
-    ----------
+    ----------"
 
     username: str
         spotify username of the intended user - note: not the display name of the user (mine, for example, is kcm4s9xdvua5ft5glrsxii3ki, not d.chan)
@@ -235,7 +244,7 @@ def updateTkinterVariables(spotify_object):
         the filepath to the album image as a string
     """
 
-    dev.devPrint(f"Checking play status: {playback.check_playing(spotify_object)}")
+    dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
 
     #check if spotify is currently playing; this should prevent errors
     if playback.check_playing(spotify_object):
@@ -247,10 +256,12 @@ def updateTkinterVariables(spotify_object):
         song_string = f"{shortenText(song_name, maximum_lengths['song'])}"
         artist_string = f"{shortenText(artist, maximum_lengths['artist'])}"
 
-        final.inline(f"{song_string} by {artist_string}")
+        final.finalPrint(f"{song_string} by {artist_string}")
 
         #get the image lists for the song
         album_image_data, aritst_image_data = playback.song_image_info(spotify_object)
+
+        dev.devPrint(f"album image url: {chooseImage(album_image_data, default_image_size)}")
 
         #update album image accordingly
         resource = urllib.request.urlopen(chooseImage(album_image_data, default_image_size))
@@ -261,15 +272,23 @@ def updateTkinterVariables(spotify_object):
         #update the album_image_filepath as well
         album_image_filepath = "./images/album.jpg"
 
+        #update the value for the progress bar
+        current_progress, total_length = playback.playback_time_info(spotify_object, "ms")
+        progress_bar_tk['value'] = (current_progress/total_length)*100
+
+        dev.devPrint(f"current progress: {(current_progress/total_length)*100}")
+
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
-        dev.devPrint("Some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
+        dev.devPrint("some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
         #set labels to placeholders
         song_string = "not playing anything"
         artist_string = shortenText("\"TempT > flame\" - TempT", maximum_lengths["artist"])
 
         #set image to the default red square
         album_image_filepath = "./images/no_album_image.jpg"
+
+        #value of the progress bar will remain the same as last update
 
         final.finalPrint("some issue occurred, labels have been set to defaults.")
     
