@@ -113,7 +113,6 @@ album_image_tk = tk.Label(window, image=album_image)
 album_image_tk.place(x = placement_coordinates["album_image"]["x"], y = placement_coordinates["album_image"]["y"])
 
 #setup progress bar
-progress_value = 0
 progress_bar_tk = tkttk.Progressbar(window, orient=HORIZONTAL, length=500, mode="determinate")
 progress_bar_tk.place(x = placement_coordinates["progress_bar"]["x"], y = placement_coordinates["progress_bar"]["y"])
 
@@ -244,7 +243,10 @@ def updateTkinterVariables(spotify_object):
         the filepath to the album image as a string
     """
 
-    dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
+    try:
+        dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
+    except:
+        dev.devPrint("checking play status: failed, likely due to network problems")
 
     #check if spotify is currently playing; this should prevent errors
     if playback.check_playing(spotify_object):
@@ -280,7 +282,7 @@ def updateTkinterVariables(spotify_object):
 
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
-        dev.devPrint("some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
+        dev.devPrint("some error occured (nothing is playing or their is some networking issue)...setting labels and images to defaults")
         #set labels to placeholders
         song_string = "not playing anything"
         artist_string = shortenText("\"TempT > flame\" - TempT", maximum_lengths["artist"])
