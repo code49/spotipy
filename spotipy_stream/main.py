@@ -276,9 +276,9 @@ def updateTkinterVariables(spotify_object):
 
         #update the value for the progress bar
         current_progress, total_length = playback.playback_time_info(spotify_object, "ms")
-        progress_bar_tk['value'] = round((current_progress/total_length)*100)
+        progress_bar_tk['value'] = (current_progress/total_length)*100
 
-        dev.devPrint(f"current progress: {round((current_progress/total_length)*100)}%")
+        dev.devPrint(f"current progress: {(current_progress/total_length)*100}%")
 
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
