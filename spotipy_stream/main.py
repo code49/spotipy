@@ -80,7 +80,7 @@ placement_coordinates = {
     "album_image": {"x": 0, "y": 0},
     "song_text": {"x": 310, "y": 85},
     "artist_text": {"x": 310, "y": 150},
-    "progress_bar": {"x": 301, "y": 279}
+    "progress_bar": {"x": 302, "y": 279}
 }
 
 #label padding
@@ -276,9 +276,9 @@ def updateTkinterVariables(spotify_object):
 
         #update the value for the progress bar
         current_progress, total_length = playback.playback_time_info(spotify_object, "ms")
-        progress_bar_tk['value'] = (current_progress/total_length)*100
+        progress_bar_tk['value'] = round((current_progress/total_length)*100)
 
-        dev.devPrint(f"current progress: {(current_progress/total_length)*100}")
+        dev.devPrint(f"current progress: {round((current_progress/total_length)*100)}%")
 
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
