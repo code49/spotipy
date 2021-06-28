@@ -243,14 +243,10 @@ def updateTkinterVariables(spotify_object):
         the filepath to the album image as a string
     """
 
-<<<<<<< HEAD
-    dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
-=======
     try:
         dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
     except:
         dev.devPrint("checking play status: failed, likely due to network problems")
->>>>>>> 6ebb50efa715a92a4ce9c79f1e1763a6dba7818a
 
     #check if spotify is currently playing; this should prevent errors
     if playback.check_playing(spotify_object):
@@ -265,11 +261,7 @@ def updateTkinterVariables(spotify_object):
         final.finalPrint(f"{song_string} by {artist_string}")
 
         #get the image lists for the song
-        try:
-            album_image_data, aritst_image_data = playback.song_image_info(spotify_object)
-        except:
-            spotify_object = setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri)
-            album_image_data, aritst_image_data = playback.song_image_info(spotify_object)
+        album_image_data, aritst_image_data = playback.song_image_info(spotify_object)
 
         dev.devPrint(f"album image url: {chooseImage(album_image_data, default_image_size)}")
 
@@ -278,8 +270,6 @@ def updateTkinterVariables(spotify_object):
         output = open("./images/album.jpg","wb")
         output.write(resource.read())
         output.close()
-
-        final.finalPrint(f"album image: {chooseImage(album_image_data, default_image_size)}")
 
         #update the album_image_filepath as well
         album_image_filepath = "./images/album.jpg"
@@ -292,11 +282,7 @@ def updateTkinterVariables(spotify_object):
 
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
-<<<<<<< HEAD
-        dev.devPrint("some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
-=======
         dev.devPrint("some error occured (nothing is playing or their is some networking issue)...setting labels and images to defaults")
->>>>>>> 6ebb50efa715a92a4ce9c79f1e1763a6dba7818a
         #set labels to placeholders
         song_string = "not playing anything"
         artist_string = shortenText("\"TempT > flame\" - TempT", maximum_lengths["artist"])
@@ -389,7 +375,7 @@ def main():
     
     final.finalPrint("all components have finished starting...")
     time.sleep(2)
-    # final.clear()
+    final.clear()
 
     #start the tkinter window update loop
     window.mainloop()
