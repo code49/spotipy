@@ -243,14 +243,11 @@ def updateTkinterVariables(spotify_object):
         the filepath to the album image as a string
     """
 
-<<<<<<< HEAD
-    dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
-=======
+    #add in a check just to ensure network problems don't crash the program
     try:
         dev.devPrint(f"checking play status: {playback.check_playing(spotify_object)}")
     except:
         dev.devPrint("checking play status: failed, likely due to network problems")
->>>>>>> 6ebb50efa715a92a4ce9c79f1e1763a6dba7818a
 
     #check if spotify is currently playing; this should prevent errors
     if playback.check_playing(spotify_object):
@@ -292,11 +289,7 @@ def updateTkinterVariables(spotify_object):
 
     else: #this should only run when nothing is playing, but it's also good if something unexpectedly breaks
 
-<<<<<<< HEAD
         dev.devPrint("some error occured (or, more likely, nothing is playing)...setting labels and images to defaults.")
-=======
-        dev.devPrint("some error occured (nothing is playing or their is some networking issue)...setting labels and images to defaults")
->>>>>>> 6ebb50efa715a92a4ce9c79f1e1763a6dba7818a
         #set labels to placeholders
         song_string = "not playing anything"
         artist_string = shortenText("\"TempT > flame\" - TempT", maximum_lengths["artist"])
