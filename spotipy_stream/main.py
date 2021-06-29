@@ -8,7 +8,6 @@ we'll see ¯\_(ツ)_/¯
 
 #----- setup dev stuff -----
 
-from SpotipyFunction_Set.playback import basic_song_info
 from python_dev_tools import dev, final, setup #import the dev tool files, run setup routine
 setup.main()
 
@@ -92,7 +91,7 @@ label_padding = {
 #default image size
 default_image_size = 320
 
-#----- create other necessary tkinter objects -----
+#----- create other necessary tkinter objects -----python main.py 
 
 #customize window
 window.title(window_title)
