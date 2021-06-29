@@ -11,6 +11,11 @@ we'll see ¯\_(ツ)_/¯
 from python_dev_tools import dev, final, setup #import the dev tool files, run setup routine
 setup.main()
 
+#----- load environment variables -----
+
+import settings
+settings = settings.getSettings()
+
 #----- setup spotipy-playback functions -----
 
 from SpotipyFunction_Set import playback
