@@ -3,13 +3,13 @@
 """
 This is meant to be the main, "just run this" file for the spotipy_stream viewer (i.e. a simplified, larger-font version 
 for stream visibility purposes) - I might make this into multiple files at some point, might not, 
-we'll see ¯\_(ツ)_/¯
+we'll see¯
 """
 
 #----- setup dev stuff -----
 
-from python_dev_tools import dev, final, setup #import the dev tool files, run setup routine
-setup.main()
+from python_dev_tools import dev, final, module_setup #import the dev tool files, run setup routine
+module_setup.setup_modules()
 
 #----- load environment variables -----
 
@@ -44,7 +44,7 @@ import time
 #----- setup spotify constants -----
 #in the future, it might be worthwhile to create a "settings" file of some variety to accomplish this
 
-#spotipy api env variables - needed to create spotify_object (first would need to be updated if switching users)
+#spotipy api env variables - n needed to create spotify_object (first would need to be updated if switching users)
 username = "kcm4s9xdvua5ft5glrsxii3ki"
 client_id = "60a52b9a3da546e6a7ef6248cb5ef464"
 client_secret = "ea8bc44cc56e4f56aad11e073f7b2ee7"
