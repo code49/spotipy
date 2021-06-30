@@ -3,7 +3,7 @@
 """
 This is meant to be the main, "just run this" file for the spotipy_stream viewer (i.e. a simplified, larger-font version 
 for stream visibility purposes) - I might make this into multiple files at some point, might not, 
-we'll see¯
+we'll see
 """
 
 #----- setup dev stuff -----
