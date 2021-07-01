@@ -220,7 +220,7 @@ def chooseImage(images_list, default_size):
                     return images_list[-(i - 1)]["url"] #returning the url of the image previous (i.e. the next smaller image)
                 break #technically speaking, this should never be reached, but just in case
     
-    #if anything errors (likely due to no images, which seem to occur from obscure but slightly older songs/artists, e.g. Arrumie Shannon's 왜요 왜요)
+    #if anything errors (likely due to no images, which seem to occur from obscure but slightly older songs/artists, e.g. Arrumie Shannon)
     except:
         return "no image"
 
