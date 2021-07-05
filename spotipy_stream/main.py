@@ -9,12 +9,14 @@ we'll see
 #----- setup dev stuff -----
 
 from python_dev_tools import dev, final, module_setup #import the dev tool files, run setup routine
-module_setup.setup_modules()
+module_list = ["python-dotenv", "spotipy", "Pillow"]
+module_setup.setup_modules(module_list)
 
 #----- load environment variables -----
 
 import settings
-settings = settings.getSettings()
+settings_list = ["USERNAME", "CLIENT_ID", "CLIENT_SECRET"]
+settings = settings.getSettings(settings_list)
 
 #----- setup spotipy-playback functions -----
 
@@ -45,9 +47,9 @@ import time
 #in the future, it might be worthwhile to create a "settings" file of some variety to accomplish this
 
 #spotipy api env variables - n needed to create spotify_object (first would need to be updated if switching users)
-username = "kcm4s9xdvua5ft5glrsxii3ki"
-client_id = "60a52b9a3da546e6a7ef6248cb5ef464"
-client_secret = "ea8bc44cc56e4f56aad11e073f7b2ee7"
+username = settings["USERNAME"]
+client_id = settings["CLIENT_ID"]
+client_secret = settings["CLIENT_SECRET"]
 scope = "user-read-currently-playing"
 redirect_uri = "http://localhost:8888/callback"
 

@@ -17,10 +17,25 @@ load_dotenv(find_dotenv())
 
 #----- create function to return environment variables to main file -----
 
-def getSettings():
-    settings = {
-    #for each environment variable, use os.getenv() to load the value its key
+def getSettings(settings_list):
+    """
+    Function that extracts settings from a .env file
+
+    Parameters
+    ----------
     
-    }
+    settings_list: list
+        list of strings containing each setting's name
+
+    Returns
+    -------
+
+    settings: dict
+        dictionary of settings
+
+    """
+    settings = {}
+    for setting in settings_list:
+        settings[setting] = os.getenv(setting)
     
     return settings
