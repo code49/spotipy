@@ -141,7 +141,7 @@ def setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri):
         spotify api application client secret - this can also be found on the spotify developer dashboard
 
     scope: str
-        user-read-currently-playing (shouldn't need more than this for this application)
+        scope of the resulting spotify object
 
     redirect_uri: str
         http://localhost:8888/callback (just needs to be a live link, which this is)
@@ -149,7 +149,8 @@ def setupSpotifyObject(username, scope, client_id, client_secret, redirect_uri):
     Returns
     -------
 
-    spotify_object: spotipy object with scope "user-read-currently-playing"
+    spotify_object: spotipy object 
+        spotipy object with scope "user-read-currently-playing"
 
     """
 
