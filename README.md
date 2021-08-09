@@ -77,6 +77,17 @@ Due to the way Spotify categorizes it's audio offerings, there is a slight diffe
 
 One last known limitation to the Spotify API is the fact that there is no way to get data about the user's queued songs. This means that the closest thing we can do to getting a user's "queue" is to get data about the songs in whatever collection (i.e. album or playlist) the user is currently playing from and presume that represents the upcoming songs in the user's queue.
 
+### API call count
+
+According to Spotify's own documentation:
+
+> Rate Limiting enables Web API to share access bandwidth to its resources equally across all users.
+> Rate limiting is applied as per application based on Client ID, and regardless of the number of users who use the application simultaneously.
+> To reduce the amount of requests, use endpoints that fetch multiple entities in one request. For example: If you often request single tracks, albums, or artists, use endpoints such as Get Several Tracks, Get Several Albums or Get Several Artists, instead.
+> Note: If Web API returns status **code 429**, it means that you have sent too many requests. When this happens, check the Retry-After header, where you will see a number displayed. This is the number of seconds that you need to wait, before you try your request again.
+
+In practice, I've never been able to trigger a rate limit on my own (I tend to remove the delays between API calls, and even then have never encounter such behaviour), nor has the company I worked for ([Vestaboard](vestaboard.com)), which at the time of writing ~250 users simultaneously calling for user playback data every 2-ish minutes. In addition, Spotify seemingly automatically grants "quota extension request" status (or something like that, essentially more API calls) for certain applications - I'm not exactly sure what conditions allow for one to get their application such a status, so continue to look out for the 429 "too many requests" error response, but for the most part you should be fine.
+
 ***
 
 ## planned future features
