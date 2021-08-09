@@ -4,7 +4,7 @@
 
 Frankly, I very much dislike the Spotify desktop app: there is limited spacing customization to prioritise the information most important to me, and there is no real way to clearly see and appreciate the beautifully-done album covers. This project intends to create a more customizable and more simple version of the Spotify interface, prioritizing the most important information and control functions first and foremost.
 
-As this project is meant to act as a way to customize your Spotify viewing experience, feel free to copy and use it as you see fit. I've currently using the [Tkinter]() library to display information due to the relatively simple setup and control, but of course you're free to use whatever you want (PyGame, CLI, etc.). If you're a beginner and want to get to know how to use Tkinter and the various widgets available for it, check out [this]() W3D schools site.
+As this project is meant to act as a way to customize your Spotify viewing experience, feel free to copy and use it as you see fit. I've currently using the [Tkinter](https://docs.python.org/3/library/tkinter.html) library to display information due to the relatively simple setup and control, but of course you're free to use whatever you want (PyGame, CLI, etc.). If you're a beginner and want to get to know how to use Tkinter and some of the various widgets available for it, check out [this](https://www.tutorialspoint.com/python/python_gui_programming.htm) tutorials point site.
 
 ***
 
@@ -18,7 +18,7 @@ Basic setup of the project is quite simple, as even though two other projects ar
 
 ### Spotify API credentials
 
-In order to be able to get data from the [Spotify API](), certain account-specific credentials are required, these being client_id, client_secret, and spotify_username. To get these, simply navigate to [Spotify for Developers](). sign in with your spotify account (no need to worry, there is no difference between a 'normal' and 'developer' spotify account), and create an app. Doing so should bring up a window with all the necessary API credential information. As a note, app creation will ask for a redirect_uri - this is essentially what the site will redirect users to in case authentication fails or something - www.google.com should suffice for this. Cloning the project from git and doing these steps should be sufficient for basic functionality from the command line.
+In order to be able to get data from the [Spotify API](https://developer.spotify.com/documentation/web-api/), certain account-specific credentials are required, these being client_id, client_secret, and spotify_username. To get these, simply navigate to [Spotify for Developers](https://developer.spotify.com/). sign in with your spotify account (no need to worry, there is no difference between a 'normal' and 'developer' spotify account), and create an app. Doing so should bring up a window with all the necessary API credential information. As a note, app creation will ask for a redirect_uri - this is essentially what the site will redirect users to in case authentication fails or something - any weblink should suffice (I personally use www.google.com), just make sure to use the same one in the .env file. Cloning the project from git and doing these steps should be sufficient for basic functionality from the command line.
 
 ### (optional) AHK shortcut setup
 
@@ -28,7 +28,7 @@ However, in addition to basic command line functionality, tools are already buil
 
 ## current visualizations/tools
 
-- spotipy_stream: a simple widget that's useful for streamers looking to show chat what ((*totally* DMCA-free) music they're listening to
+- spotipy_stream: a simple widget that's useful for streamers looking to show chat what (*totally* DMCA-free) music they're listening to
 - spotipy_viewer: a slightly more complex widget meant for widespread desktop use, with fancy features like links to music videos, lyrics, and artist profiles; has multiple modes depending on presumed use case
 - spotipy_controller: a simple widget for controlling music playback, meant to be used in conjunction with visualization widgets
 
@@ -39,12 +39,12 @@ See below a simple guide to navigating the project's code. This is here to help 
 ```
 spotipy  
 -----| /application icons/: this folder contains some sample files I made for use as AutoHotKey shortcut icons  
------| /sample data/: this folder contains some sample files of data (more specifically data for Everglow's D+1) returned by the Spotify API, mostly for testing and reference reasons  
+-----| /sample data/: this folder contains some sample files of data (more specifically data for Everglow's D+1) returned by the Spotify API, mostly for testing and reference reasons - note that SpotipyFunction_Set will return formatted versions of the data in these sample files
 -----| /python_dev_tools/: this folder contains the latest supported version of code49:python_dev_tools (see above), used for various developer help functions  
 -----| /SpotipyFunction_Set/: this folder contains the latest supported version of sharkhead2:SpotipyFunction_Set (see above), used for all Spotify API calls  
 -----| /visualizers/: this folder contains all widgets relating to Spotify visualizations  
 ----------| basic_data.py: this file contains functions for getting basic song data needed for visualization, meant to be an easy way to get started creating a custom visualizer  
-----------| spotipy_stream.py: this file contains the code for the spotify_stream viewer  
+----------| spotipy_stream.py: this file contains the code for the spotify_stream viewer - also the most basic in case you want a template to use to create something custom  
 ----------| spotipy_viewer.py: this file contains the code for the spotify_viewer (desktop) viewer  
 -----| /tools/: this folder contains all widgets not related to visualizing spotify (e.g. controlling music playback)  
 ----------| spotipy_controller.py: this file contains the code for the spotify_controller, used for controlling music playback  
@@ -58,12 +58,16 @@ One of the greatest limitations to working with Spotify data and functions is, o
 
 ### authentication
 
-One of the most biggest limitations to [Spotipy]() (the translation layer [SpotipyFunction_Set](https://github.com/TheSharkhead2/SpotipyFunction_Set) is using to make API calls) and the Spotify API in general is the periodic need for reauthentication or refreshing of the API token. Currently, [SpotipyFunction_Set](https://github.com/TheSharkhead2/SpotipyFunction_Set) gets around this by automatically refreshing the token whenever an error is encountered by an API-calling function, but obviously this comes with the caveat of also covering up non-authentication-related issues. However, we're currently working on using Spotify's API to refresh the token more specifically to when the program needs reauthentication, but in the meantime be warned that some API related issues may occur without erroring.
+One of the most biggest limitations to [Spotipy](https://spotipy.readthedocs.io/en/2.18.0/) (the translation layer [SpotipyFunction_Set](https://github.com/TheSharkhead2/SpotipyFunction_Set) is using to make API calls) and the Spotify API in general is the periodic need for reauthentication or refreshing of the API token. Currently, [SpotipyFunction_Set](https://github.com/TheSharkhead2/SpotipyFunction_Set) gets around this by automatically refreshing the token whenever an error is encountered by an API-calling function, but obviously this comes with the caveat of also covering up non-authentication-related issues. However, we're currently working on using Spotify's API to refresh the token more specifically to when the program needs reauthentication, but in the meantime be warned that some API related issues may occur without erroring.
 
 ### friends
 
-No, I don't mean that you don't have any friends, either real or on Spotify.  
+No, I don't mean that you don't have any friends, either real or on Spotify (maybe you don't, I'm not judging).  
 This issue lies with the fact that the Spotify API doesn't offer methods for getting friend data, whether that be getting a list of the current user's friends, getting friend playback data, etc. Perhaps Spotify will eventually add some sort of route to allow public access to such data, but my presumption is that since friends would need to approve data access and the Spotify API has been left largely untouched since 2014, Spotify may never do this. 
+
+### ads + premium
+
+I guess Spotify has to make money somehow, and premium is most definitely the way they plan on doing that; a certain part of me wants to say that the differences between API capabailities with and without premium is chalked up mostly to trying to get people to spend more, but I'm sure that in reality they're just trying to stay afloat. In any case, there are two limitations when it comes to non-premium accounts: first, ads break most playback-related API functions due to the fact that a different data structure is used to represent ads, and second, many functions relating to controlling playback are simply unavailable (e.g. skip backwards, due to the fact that non-premium accounts are not allowed to skip backwards/forwards more than 6 times an hour).
 
 ### podcasts
 
