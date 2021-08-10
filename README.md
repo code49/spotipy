@@ -18,7 +18,7 @@ Basic setup of the project is quite simple, as even though two other projects ar
 
 ### spotify API credentials
 
-In order to be able to get data from the [spotify API](https://developer.spotify.com/documentation/web-api/), certain account-specific credentials are required, these being client_id, client_secret, and spotify_username. To get these, simply navigate to [spotify for Developers](https://developer.spotify.com/). sign in with your spotify account (no need to worry, there is no difference between a 'normal' and 'developer' spotify account), and create an app. Doing so should bring up a window with all the necessary API credential information. As a note, app creation will ask for a redirect_uri - this is essentially what the site will redirect users to in case authentication fails or something - any weblink should suffice (I personally use www.google.com), just make sure to use the same one in the .env file. Cloning the project from git and doing these steps should be sufficient for basic functionality from the command line.
+In order to be able to get data from the [spotify API](https://developer.spotify.com/documentation/web-api/), certain account-specific credentials are required, these being client_id, client_secret, and spotify_username. To get these, simply navigate to [spotify for developers](https://developer.spotify.com/), sign in with your spotify account (no need to worry, there is no difference between a 'normal' and 'developer' spotify account), and create an app. Doing so should bring up a window with all the necessary API credential information. As a note, app creation will ask for a redirect_uri - this is essentially what the site will redirect users to in case authentication fails or something - any weblink should suffice (I personally use www.google.com), just make sure to use the same one (or at least one of the ones you've whitelisted on the developer dashboard) in the .env file. Cloning the project from git and doing these steps should be sufficient for basic functionality from the command line.
 
 ### (optional) AHK shortcut setup
 
@@ -49,7 +49,7 @@ spotipy-tools
 -----| /tools/: this folder contains all widgets not related to visualizing spotify (e.g. controlling music playback)  
 ----------| spotipy_controller.py: this file contains the code for the spotify_controller, used for controlling music playback  
 -----| run.py: this file contains the code for allowing code to be run more simply from the command line  
------| ENVIRONMENT/CONFIG FILE HERE  
+-----| .env.example: rename this file to ".env" and fill in the various credentials so that the spotify API can be called  
 ```
 
 ## known limitations
