@@ -44,8 +44,12 @@ spotipy-tools
 -----| /SpotipyFunction_Set/: this folder contains the latest supported version of sharkhead2:SpotipyFunction_Set (see above), used for all spotify API calls  
 -----| /visualizers/: this folder contains all widgets relating to spotify visualizations  
 ----------| basic_data.py: this file contains functions for getting basic song data needed for visualization, meant to be an easy way to get started creating a custom visualizer  
-----------| spotipy_stream.py: this file contains the code for the spotify_stream viewer - also the most basic in case you want a template to use to create something custom  
-----------| spotipy_viewer.py: this file contains the code for the spotify_viewer (desktop) viewer  
+----------| /spotipy_stream/: this folder contains all the files needed for the spotify_stream visualizer - if you want to get started creating a custom visualizer, use this as a template
+----------------| spotipy_stream.py: this file contains the code for the spotify_stream viewer
+----------------| album.jpg: this file represents the image the visualizer should display; usually the album image for the current song
+----------------| no_album_image.jpg: this file represents the image the visualizer should display when no album image is available
+----------| /spotipy_viewer/: this folder contains all the files needed for the spotipy_viewer visualizer   
+----------------| spotipy_viewer.py: this file contains the code for the spotify_viewer (desktop) viewer  
 -----| /tools/: this folder contains all widgets not related to visualizing spotify (e.g. controlling music playback)  
 ----------| spotipy_controller.py: this file contains the code for the spotify_controller, used for controlling music playback  
 -----| run.py: this file contains the code for allowing code to be run more simply from the command line  
